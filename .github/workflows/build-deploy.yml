@@ -1,0 +1,21 @@
+name: "Build and push fluentd image"
+on: workflow_dispatch
+jobs:
+  baseBuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get image tag 
+        run: echo "ITAG=$(date +'%Y%m%d.%H.%M')" >> $GITHUB_ENV
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Build & push Docker Base Image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: fluentd-aggregator-geoip
+          tags: $ITAG, latest
+          registry: ghcr.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.GHCR_USER }}
+          password: ${{ secrets.GHCR_PWD }}

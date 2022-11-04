@@ -15,4 +15,4 @@ RUN set -eu; \
   # COPY parser_eltsv.rb /fluentd/plugins/
 
 # Set back to non-root user
-# USER fluent
+USER fluent

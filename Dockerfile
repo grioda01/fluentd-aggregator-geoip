@@ -12,7 +12,7 @@ RUN set -eu; \
   gem sources --clear-all; \
   apk del .build-deps; \
   rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem;
-  COPY parser_eltsv.rb /fluentd/plugins/
+  # COPY parser_eltsv.rb /fluentd/plugins/
 
 # Set back to non-root user
-USER fluent
+# USER fluent

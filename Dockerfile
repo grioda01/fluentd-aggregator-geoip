@@ -1,4 +1,4 @@
-FROM ghcr.io/stevehipwell/fluentd-aggregator:latest
+FROM ghcr.io/stevehipwell/fluentd-aggregator:1.14.3
 
 
 # Use root account to use apk

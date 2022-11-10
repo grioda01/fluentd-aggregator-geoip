@@ -26,7 +26,7 @@ require 'fluent/plugin/parser'
 
 module Fluent
   module Plugin
-    class LabeledTSVParser < Parser
+    class LabeledETSVParser < Parser
       Plugin.register_parser('eltsv', self)
 
       desc 'The delimiter character (or string) of TSV values'
@@ -39,6 +39,9 @@ module Fluent
       config_param :delimiter_pattern, :regexp, default: nil
       desc 'The delimiter character between field name and value'
       config_param :label_delimiter, :string, default: ":"
+      desc 'Array of keys to remap.'
+      config_param :remapkeys_map, :array, default: nil
+      
 
       config_set_default :time_key, 'time'
 
@@ -46,9 +49,13 @@ module Fluent
         super
         @delimiter = @delimiter_pattern || @delimiter
       end
-
+      
       def parse(text)
         r = {}
+        map = {}
+        if @remapkeys_map
+          map = @remapkeys_map.to_h
+        end
         text.split(@delimiter).each do |pair|
           if pair.include? @label_delimiter
             key, value = pair.split(@label_delimiter, 2)
@@ -65,7 +72,9 @@ module Fluent
                 value = val.to_f
               end
             end
-            
+            if @remapkeys_map && map.has_key?(key)
+              key = map[key]
+            end
             r[key] = value
           end
         end
